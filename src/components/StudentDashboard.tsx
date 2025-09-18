@@ -41,6 +41,15 @@ const notifications = [
 
 export const StudentDashboard = () => {
   const [selectedTab, setSelectedTab] = useState("overview");
+  const [currentUser, setCurrentUser] = useState({ username: "Student", role: "student" });
+
+  // Get current user from localStorage
+  useState(() => {
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
+  });
 
   return (
     <div className="p-6 space-y-6">
@@ -48,7 +57,7 @@ export const StudentDashboard = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold bg-gradient-neon bg-clip-text text-transparent">
-            Welcome back, Alex! 
+            Welcome back, {currentUser.username}! 
           </h1>
           <p className="text-muted-foreground mt-1">
             Ready to conquer your academic goals today?

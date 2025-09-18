@@ -82,6 +82,14 @@ export const LoginPage = () => {
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
+      
+      // Store user data in localStorage
+      localStorage.setItem('currentUser', JSON.stringify({
+        username,
+        role: selectedRole,
+        loginTime: new Date().toISOString()
+      }));
+      
       toast({
         title: "Login Successful!",
         description: `Welcome to the portal, ${username}!`,
