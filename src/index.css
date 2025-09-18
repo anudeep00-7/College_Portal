@@ -2,41 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Futuristic College Portal Design System - Neon Aesthetics */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark theme with neon accents */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Neon Blue Primary */
+    --primary: 195 100% 50%;
+    --primary-foreground: 240 10% 3.9%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Neon Purple Secondary */
+    --secondary: 258 90% 66%;
+    --secondary-foreground: 240 10% 3.9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Neon Green Accent */
+    --accent: 142 100% 50%;
+    --accent-foreground: 240 10% 3.9%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 195 100% 50%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Neon Glow Colors */
+    --neon-blue: 195 100% 50%;
+    --neon-purple: 258 90% 66%;
+    --neon-green: 142 100% 50%;
+    --neon-pink: 328 86% 70%;
+    
+    /* Glassmorphism */
+    --glass: 240 10% 3.9% / 0.1;
+    --glass-border: 0 0% 100% / 0.2;
+    
+    /* Gradients */
+    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-blue)) 0%, hsl(var(--neon-purple)) 100%);
+    --gradient-bg: linear-gradient(135deg, hsl(240 10% 3.9%) 0%, hsl(240 8% 6%) 50%, hsl(240 10% 3.9%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(240 10% 3.9% / 0.8) 0%, hsl(240 3.7% 15.9% / 0.4) 100%);
+    
+    /* Shadows & Glows */
+    --shadow-neon-blue: 0 0 20px hsl(var(--neon-blue) / 0.5);
+    --shadow-neon-purple: 0 0 20px hsl(var(--neon-purple) / 0.5);
+    --shadow-neon-green: 0 0 20px hsl(var(--neon-green) / 0.5);
+    --shadow-glass: 0 8px 32px hsl(0 0% 0% / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +128,97 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-bg);
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  /* Glassmorphism Components */
+  .glass-card {
+    background: var(--gradient-card);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .neon-glow-blue {
+    box-shadow: var(--shadow-neon-blue);
+  }
+  
+  .neon-glow-purple {
+    box-shadow: var(--shadow-neon-purple);
+  }
+  
+  .neon-glow-green {
+    box-shadow: var(--shadow-neon-green);
+  }
+  
+  /* Neon Border Animations */
+  .neon-border {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .neon-border::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-neon);
+    transition: left 0.5s;
+    z-index: -1;
+  }
+  
+  .neon-border:hover::before {
+    left: 0;
+  }
+  
+  /* Floating Animation */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  /* Pulse Glow Animation */
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulseGlow {
+    from {
+      box-shadow: 0 0 20px hsl(var(--neon-blue) / 0.4);
+    }
+    to {
+      box-shadow: 0 0 30px hsl(var(--neon-blue) / 0.8);
+    }
+  }
+  
+  /* Particle Background */
+  .particle-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 20% 80%, hsl(var(--neon-blue) / 0.3) 1px, transparent 1px),
+      radial-gradient(circle at 80% 20%, hsl(var(--neon-purple) / 0.3) 1px, transparent 1px),
+      radial-gradient(circle at 40% 40%, hsl(var(--neon-green) / 0.3) 1px, transparent 1px);
+    background-size: 50px 50px, 80px 80px, 120px 120px;
+    animation: particles 20s linear infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes particles {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-50px, -50px); }
   }
 }
