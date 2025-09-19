@@ -15,30 +15,87 @@ import {
   GraduationCap,
   Brain,
   FileText,
-  MessageSquare
+  MessageSquare,
+  Shield,
+  BarChart3,
+  User
 } from "lucide-react";
 
-const navigationItems = [
-  { id: "dashboard", label: "Dashboard", icon: Home, path: "/dashboard/student" },
-  { id: "timetable", label: "Timetable", icon: Calendar, path: "/dashboard/student/timetable" },
-  { id: "assignments", label: "Assignments", icon: FileText, path: "/dashboard/student/assignments" },
-  { id: "library", label: "Digital Library", icon: BookOpen, path: "/dashboard/student/library" },
-  { id: "wellness", label: "Mental Health", icon: Heart, path: "/dashboard/student/wellness" },
-  { id: "skills", label: "Skill Development", icon: Brain, path: "/dashboard/student/skills" },
-  { id: "events", label: "Events & Clubs", icon: Users, path: "/dashboard/student/events" },
-  { id: "forum", label: "Forum", icon: MessageSquare, path: "/dashboard/student/forum" },
-];
+const getNavigationItems = (role: string) => {
+  const baseItems = [
+    { id: "dashboard", label: "Dashboard", icon: Home, path: `/dashboard/${role}` },
+  ];
+
+  switch (role) {
+    case "student":
+      return [
+        ...baseItems,
+        { id: "timetable", label: "Timetable", icon: Calendar, path: "/dashboard/student/timetable" },
+        { id: "assignments", label: "Assignments", icon: FileText, path: "/dashboard/student/assignments" },
+        { id: "library", label: "Digital Library", icon: BookOpen, path: "/dashboard/student/library" },
+        { id: "wellness", label: "Mental Health", icon: Heart, path: "/dashboard/student/wellness" },
+        { id: "skills", label: "Skill Development", icon: Brain, path: "/dashboard/student/skills" },
+        { id: "events", label: "Events & Clubs", icon: Users, path: "/dashboard/student/events" },
+        { id: "forum", label: "Forum", icon: MessageSquare, path: "/dashboard/student/forum" },
+      ];
+    case "faculty":
+      return [
+        ...baseItems,
+        { id: "courses", label: "My Courses", icon: BookOpen, path: "/dashboard/faculty/courses" },
+        { id: "students", label: "Students", icon: Users, path: "/dashboard/faculty/students" },
+        { id: "materials", label: "Course Materials", icon: FileText, path: "/dashboard/faculty/materials" },
+        { id: "grades", label: "Grading", icon: Trophy, path: "/dashboard/faculty/grades" },
+        { id: "forum", label: "Forum", icon: MessageSquare, path: "/dashboard/faculty/forum" },
+      ];
+    case "admin":
+      return [
+        ...baseItems,
+        { id: "users", label: "User Management", icon: Users, path: "/dashboard/admin/users" },
+        { id: "analytics", label: "Analytics", icon: BarChart3, path: "/dashboard/admin/analytics" },
+        { id: "courses", label: "Course Management", icon: BookOpen, path: "/dashboard/admin/courses" },
+        { id: "reports", label: "Reports", icon: FileText, path: "/dashboard/admin/reports" },
+        { id: "system", label: "System Settings", icon: Shield, path: "/dashboard/admin/system" },
+      ];
+    case "counsellor":
+      return [
+        ...baseItems,
+        { id: "appointments", label: "Appointments", icon: Calendar, path: "/dashboard/counsellor/appointments" },
+        { id: "cases", label: "Active Cases", icon: User, path: "/dashboard/counsellor/cases" },
+        { id: "wellness", label: "Wellness Resources", icon: Heart, path: "/dashboard/counsellor/wellness" },
+        { id: "forum", label: "Moderate Forum", icon: MessageSquare, path: "/dashboard/counsellor/forum" },
+        { id: "reports", label: "Reports", icon: FileText, path: "/dashboard/counsellor/reports" },
+      ];
+    default:
+      return baseItems;
+  }
+};
 
 export const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Get user role from localStorage
+  const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+  const userRole = user.role || 'student';
+  const navigationItems = getNavigationItems(userRole);
+
   const handleLogout = () => {
+    localStorage.removeItem('currentUser');
     navigate("/");
   };
 
   const isActive = (path: string) => location.pathname === path;
+
+  const getRoleDisplayName = (role: string) => {
+    switch (role) {
+      case "student": return "Student Dashboard";
+      case "faculty": return "Faculty Dashboard";
+      case "admin": return "Admin Dashboard";
+      case "counsellor": return "Counsellor Dashboard";
+      default: return "Dashboard";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-bg particle-bg">
@@ -68,7 +125,7 @@ export const DashboardLayout = () => {
               <h1 className="text-xl font-bold bg-gradient-neon bg-clip-text text-transparent">
                 College Portal
               </h1>
-              <p className="text-xs text-muted-foreground">Student Dashboard</p>
+              <p className="text-xs text-muted-foreground">{getRoleDisplayName(userRole)}</p>
             </div>
           </div>
 
@@ -104,7 +161,7 @@ export const DashboardLayout = () => {
             <Button
               variant="ghost"
               className="w-full justify-start hover:text-neon-blue"
-              onClick={() => navigate("/settings")}
+              onClick={() => navigate(`/dashboard/${userRole}/settings`)}
             >
               <Settings className="h-4 w-4 mr-3" />
               Settings
@@ -128,7 +185,7 @@ export const DashboardLayout = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="hidden lg:block">
-                <h2 className="text-lg font-semibold">Academic Dashboard</h2>
+                <h2 className="text-lg font-semibold">{getRoleDisplayName(userRole)}</h2>
                 <p className="text-sm text-muted-foreground">
                   {new Date().toLocaleDateString("en-US", {
                     weekday: "long",
