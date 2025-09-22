@@ -106,9 +106,34 @@ export const StudentDashboard = () => {
             </button>
           ))}
         </div>
-        <div className="bg-neon-blue/10 border border-neon-blue/30 rounded-lg p-4">
-          <p className="text-sm text-neon-blue">
-            How are you feeling today? Your mental wellness is just as important as your academics! 💙
+        <div className="bg-gradient-to-r from-neon-blue/10 to-neon-purple/10 border border-neon-blue/30 rounded-lg p-4">
+          <p className="text-sm text-neon-blue font-medium">
+            {(() => {
+              const quotes = [
+                "✨ 'The only way to do great work is to love what you do.' - Steve Jobs",
+                "🌟 'Success is not final, failure is not fatal: it is the courage to continue that counts.' - Winston Churchill",
+                "🚀 'Your potential is endless. Go do what you were created to do.' - Paulo Coelho",
+                "💪 'The future belongs to those who believe in the beauty of their dreams.' - Eleanor Roosevelt",
+                "🎯 'Don't watch the clock; do what it does. Keep going.' - Sam Levenson",
+                "🌈 'Every accomplishment starts with the decision to try.' - John F. Kennedy",
+                "⭐ 'Believe you can and you're halfway there.' - Theodore Roosevelt",
+                "🔥 'The harder you work for something, the greater you'll feel when you achieve it.'",
+                "💎 'Challenges are what make life interesting. Overcoming them is what makes it meaningful.'",
+                "🎨 'Your education is a dress rehearsal for a life that is yours to lead.' - Nora Ephron"
+              ];
+              const today = new Date().toDateString();
+              const savedQuote = localStorage.getItem('dailyQuote');
+              const savedDate = localStorage.getItem('quoteDate');
+              
+              if (savedDate !== today) {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                localStorage.setItem('dailyQuote', randomQuote);
+                localStorage.setItem('quoteDate', today);
+                return randomQuote;
+              }
+              
+              return savedQuote || quotes[0];
+            })()}
           </p>
         </div>
       </Card>

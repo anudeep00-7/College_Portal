@@ -52,8 +52,8 @@ export const FloatingChatbot = () => {
         >
           <MessageCircle className="h-6 w-6 text-white" />
         </Button>
-        <div className="absolute -top-12 right-0 bg-background/90 backdrop-blur-sm border border-neon-pink/30 rounded-lg px-3 py-1 text-sm text-neon-pink animate-bounce">
-          Mental Health Support 💙
+        <div className="absolute -top-12 right-0 bg-gradient-to-r from-neon-pink/20 to-neon-blue/20 backdrop-blur-md border border-neon-pink/40 rounded-lg px-4 py-2 text-sm text-white font-medium shadow-lg neon-glow-pink animate-pulse">
+          💙 Mental Health Support
         </div>
       </div>
     );
