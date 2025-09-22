@@ -42,6 +42,7 @@ const notifications = [
 export const StudentDashboard = () => {
   const [selectedTab, setSelectedTab] = useState("overview");
   const [currentUser, setCurrentUser] = useState({ username: "Student", role: "student" });
+  const [selectedMood, setSelectedMood] = useState<string>("");
 
   // Get current user from localStorage
   useState(() => {
@@ -77,57 +78,40 @@ export const StudentDashboard = () => {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="glass-card p-6 hover:neon-glow-blue transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">GPA</p>
-              <p className="text-2xl font-bold text-neon-blue">3.85</p>
-            </div>
-            <TrendingUp className="h-8 w-8 text-neon-blue" />
-          </div>
-          <Progress value={85} className="mt-3" />
-        </Card>
-
-        <Card className="glass-card p-6 hover:neon-glow-purple transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Attendance</p>
-              <p className="text-2xl font-bold text-neon-purple">92%</p>
-            </div>
-            <CheckCircle className="h-8 w-8 text-neon-purple" />
-          </div>
-          <Progress value={92} className="mt-3" />
-        </Card>
-
-        <Card className="glass-card p-6 hover:neon-glow-green transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Assignments</p>
-              <p className="text-2xl font-bold text-neon-green">5/7</p>
-            </div>
-            <Target className="h-8 w-8 text-neon-green" />
-          </div>
-          <Progress value={71} className="mt-3" />
-        </Card>
-
-        <Card className="glass-card p-6 hover:neon-glow-blue transition-all duration-300">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Wellness Score</p>
-              <p className="text-2xl font-bold text-neon-blue">Good</p>
-            </div>
-            <Heart className="h-8 w-8 text-neon-pink" />
-          </div>
-          <div className="flex space-x-1 mt-3">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-2 bg-neon-pink rounded-full flex-1" />
-            ))}
-            <div className="h-2 bg-muted rounded-full flex-1" />
-          </div>
-        </Card>
-      </div>
+      {/* Daily Mood Check-in */}
+      <Card className="glass-card p-6">
+        <h2 className="text-xl font-semibold mb-4 flex items-center">
+          <Heart className="h-5 w-5 mr-2 text-neon-pink" />
+          Daily Mood Check-in
+        </h2>
+        <div className="grid grid-cols-5 gap-4 mb-4">
+          {[
+            { mood: "excellent", icon: "😊", label: "Excellent", color: "neon-green" },
+            { mood: "good", icon: "🙂", label: "Good", color: "neon-blue" },
+            { mood: "okay", icon: "😐", label: "Okay", color: "yellow-400" },
+            { mood: "bad", icon: "😔", label: "Not Great", color: "orange-400" },
+            { mood: "terrible", icon: "😢", label: "Terrible", color: "red-400" }
+          ].map((item) => (
+            <button
+              key={item.mood}
+              onClick={() => setSelectedMood(item.mood)}
+              className={`p-4 rounded-lg border-2 transition-all duration-300 hover:scale-105 ${
+                selectedMood === item.mood
+                  ? `border-${item.color} bg-${item.color}/10`
+                  : "border-border hover:border-muted-foreground/50"
+              }`}
+            >
+              <div className="text-2xl mb-2">{item.icon}</div>
+              <p className="text-sm font-medium">{item.label}</p>
+            </button>
+          ))}
+        </div>
+        <div className="bg-neon-blue/10 border border-neon-blue/30 rounded-lg p-4">
+          <p className="text-sm text-neon-blue">
+            How are you feeling today? Your mental wellness is just as important as your academics! 💙
+          </p>
+        </div>
+      </Card>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

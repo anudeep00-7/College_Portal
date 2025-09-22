@@ -23,7 +23,12 @@ import {
   Headphones,
   Shield,
   Users,
-  Zap
+  Zap,
+  Music,
+  Play,
+  Download,
+  ExternalLink,
+  ThumbsUp
 } from "lucide-react";
 
 const counsellors = [
@@ -90,6 +95,104 @@ const resources = [
   }
 ];
 
+const recoveryResources = [
+  // Books
+  {
+    type: "book",
+    title: "The Anxiety and Worry Workbook",
+    author: "David A. Clark",
+    category: "Self-Help",
+    description: "Practical cognitive behavioral techniques for managing anxiety",
+    rating: 4.5,
+    pages: 264
+  },
+  {
+    type: "book",
+    title: "Feeling Good: The New Mood Therapy",
+    author: "David D. Burns",
+    category: "Depression",
+    description: "Revolutionary book on cognitive therapy for depression",
+    rating: 4.7,
+    pages: 736
+  },
+  {
+    type: "book",
+    title: "The Power of Now",
+    author: "Eckhart Tolle",
+    category: "Mindfulness",
+    description: "A guide to spiritual enlightenment and present moment awareness",
+    rating: 4.6,
+    pages: 236
+  },
+  
+  // Songs & Audio
+  {
+    type: "music",
+    title: "Calm Piano Collection",
+    artist: "Various Artists",
+    category: "Relaxation",
+    duration: "2 hours",
+    description: "Peaceful piano melodies for stress relief and focus",
+    mood: "calming"
+  },
+  {
+    type: "music",
+    title: "Nature Sounds for Sleep",
+    artist: "Sleep Sounds",
+    category: "Sleep Aid",
+    duration: "8 hours",
+    description: "Rain, ocean waves, and forest sounds for better sleep",
+    mood: "peaceful"
+  },
+  {
+    type: "music",
+    title: "Binaural Beats - Focus & Study",
+    artist: "BrainWave Music",
+    category: "Productivity",
+    duration: "1 hour",
+    description: "Alpha waves for enhanced concentration and learning",
+    mood: "focused"
+  },
+  
+  // Videos
+  {
+    type: "video",
+    title: "10-Minute Morning Yoga for Mental Health",
+    creator: "Yoga with Adriene",
+    category: "Yoga",
+    duration: "10 min",
+    description: "Gentle morning practice to start your day with intention",
+    views: "2.5M"
+  },
+  {
+    type: "video",
+    title: "Guided Meditation for Anxiety Relief",
+    creator: "Headspace",
+    category: "Meditation",
+    duration: "15 min",
+    description: "Professional guided meditation to reduce anxiety and stress",
+    views: "1.8M"
+  },
+  {
+    type: "video",
+    title: "Study Break Stretches for Students",
+    creator: "FitnessBlender",
+    category: "Exercise",
+    duration: "5 min",
+    description: "Quick stretching routine to relieve study tension",
+    views: "850K"
+  },
+  {
+    type: "video",
+    title: "Breathing Techniques for Panic Attacks",
+    creator: "Therapy in a Nutshell",
+    category: "Coping Skills",
+    duration: "12 min",
+    description: "Evidence-based breathing exercises for acute anxiety",
+    views: "3.2M"
+  }
+];
+
 export const MentalHealthPage = () => {
   const [selectedTab, setSelectedTab] = useState("dashboard");
   const [moodToday, setMoodToday] = useState<string>("");
@@ -99,6 +202,7 @@ export const MentalHealthPage = () => {
   ]);
   const [bookingStep, setBookingStep] = useState(1);
   const [selectedCounsellor, setSelectedCounsellor] = useState<number | null>(null);
+  const [selectedResourceType, setSelectedResourceType] = useState("all");
 
   const handleMoodSelect = (mood: string) => {
     setMoodToday(mood);
@@ -232,6 +336,126 @@ export const MentalHealthPage = () => {
                     </div>
                   );
                 })}
+              </div>
+            </Card>
+
+            {/* Recovery Resources */}
+            <Card className="glass-card p-6">
+              <h2 className="text-xl font-semibold mb-4 flex items-center">
+                <BookOpen className="h-5 w-5 mr-2 text-neon-green" />
+                Recovery & Self-Help Resources
+              </h2>
+              
+              {/* Filter Tabs */}
+              <div className="flex space-x-2 mb-6 overflow-x-auto">
+                {[
+                  { type: "all", label: "All Resources", icon: null },
+                  { type: "book", label: "Books", icon: BookOpen },
+                  { type: "music", label: "Music & Audio", icon: Music },
+                  { type: "video", label: "Videos", icon: Video }
+                ].map((filter) => (
+                  <button
+                    key={filter.type}
+                    onClick={() => setSelectedResourceType(filter.type)}
+                    className={`px-4 py-2 rounded-lg border transition-all duration-300 flex items-center space-x-2 whitespace-nowrap ${
+                      selectedResourceType === filter.type
+                        ? "border-neon-blue bg-neon-blue/10 text-neon-blue"
+                        : "border-border hover:border-muted-foreground/50"
+                    }`}
+                  >
+                    {filter.icon && <filter.icon className="h-4 w-4" />}
+                    <span className="text-sm">{filter.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Resources Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {recoveryResources
+                  .filter(resource => selectedResourceType === "all" || resource.type === selectedResourceType)
+                  .map((resource, index) => {
+                    const getIcon = () => {
+                      switch (resource.type) {
+                        case "book": return BookOpen;
+                        case "music": return Music;
+                        case "video": return Video;
+                        default: return BookOpen;
+                      }
+                    };
+                    const Icon = getIcon();
+                    const getColor = () => {
+                      switch (resource.type) {
+                        case "book": return "neon-blue";
+                        case "music": return "neon-purple";
+                        case "video": return "neon-green";
+                        default: return "neon-blue";
+                      }
+                    };
+                    const color = getColor();
+
+                    return (
+                      <Card
+                        key={index}
+                        className="glass-card p-4 hover:scale-105 transition-all duration-300 cursor-pointer border-border hover:border-neon-blue/50"
+                      >
+                        <div className="flex items-start space-x-3">
+                          <Icon className={`h-6 w-6 text-${color} flex-shrink-0 mt-1`} />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm mb-1 line-clamp-2">{resource.title}</h4>
+                            
+                            {resource.author && (
+                              <p className="text-xs text-muted-foreground mb-1">by {resource.author}</p>
+                            )}
+                            {resource.artist && (
+                              <p className="text-xs text-muted-foreground mb-1">by {resource.artist}</p>
+                            )}
+                            {resource.creator && (
+                              <p className="text-xs text-muted-foreground mb-1">by {resource.creator}</p>
+                            )}
+                            
+                            <div className="flex items-center space-x-2 mb-2">
+                              <Badge variant="secondary" className="text-xs">{resource.category}</Badge>
+                              {resource.duration && (
+                                <>
+                                  <span className="text-xs text-muted-foreground">•</span>
+                                  <span className="text-xs text-muted-foreground">{resource.duration}</span>
+                                </>
+                              )}
+                              {resource.pages && (
+                                <>
+                                  <span className="text-xs text-muted-foreground">•</span>
+                                  <span className="text-xs text-muted-foreground">{resource.pages} pages</span>
+                                </>
+                              )}
+                            </div>
+                            
+                            {resource.description && (
+                              <p className="text-xs text-muted-foreground mb-2 line-clamp-2">
+                                {resource.description}
+                              </p>
+                            )}
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center space-x-2">
+                                {resource.rating && (
+                                  <div className="flex items-center space-x-1">
+                                    <Star className="h-3 w-3 text-yellow-400 fill-current" />
+                                    <span className="text-xs text-muted-foreground">{resource.rating}</span>
+                                  </div>
+                                )}
+                                {resource.views && (
+                                  <span className="text-xs text-muted-foreground">{resource.views} views</span>
+                                )}
+                              </div>
+                              <Button variant="ghost" size="sm" className="h-6 px-2">
+                                <ExternalLink className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+                    );
+                  })}
               </div>
             </Card>
           </div>

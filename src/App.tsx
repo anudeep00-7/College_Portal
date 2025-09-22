@@ -17,6 +17,7 @@ import { EventsPage } from "@/components/EventsPage";
 import { ForumPage } from "@/components/ForumPage";
 import { SkillsPage } from "@/components/SkillsPage";
 import { SettingsPage } from "@/components/SettingsPage";
+import { FloatingChatbot } from "@/components/FloatingChatbot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,7 @@ const App = () => (
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <FloatingChatbot />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
